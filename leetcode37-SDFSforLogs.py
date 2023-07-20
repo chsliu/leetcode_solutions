@@ -152,6 +152,15 @@ def line2sudokuboard(line):
     return board
 
 
+def countClues(puzzle):
+    cnt = 0
+    for i in range(9):
+        for j in range(9):
+            if puzzle[i][j] != '.':
+                cnt += 1
+    return cnt
+
+
 def getSolution(board):
     line = ""
     for i in range(9):
@@ -200,7 +209,7 @@ def main2():
 
     print()
 
-    log.write("lineno,runtime,nodes,solution\n")
+    log.write("lineno,clues,runtime,nodes,solution\n")
 
     lineno = 0
     start0 = time.process_time()
@@ -212,14 +221,16 @@ def main2():
         board = line2sudokuboard(line)
         # print("board", board)
         # print("board", board[0][0])
-        print("Solving question on line", lineno, "...")
+        clues = countClues(board)
+        print("Solving question on line", lineno, "with", clues, "clues ...")
         # start = time.process_time()
         start = time.time()
         s.solveSudoku(board)
         end = time.time()
         # s.display()
         # logline = str(lineno)+","+str(end - start)+","+s.board+"\n"
-        logline = str(lineno)+","+str(end - start)+","+str(s.nodes)+","+"\n"
+        logline = str(lineno)+","+str(clues)+"," + \
+            str(end - start)+","+str(s.nodes)+","+"\n"
         log.write(logline)
 
         solutions.write(str(lineno)+","+getSolution(s.board)+"\n")
